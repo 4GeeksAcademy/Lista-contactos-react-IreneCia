@@ -1,16 +1,93 @@
-import rigoImageUrl from "../assets/img/rigo-baby.jpg";
+
 import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
+import ContactServices from "../services/ContactServices.js"
+import ContactCard from "./ContactCard.jsx";
+import { Link } from "react-router-dom";
+import React, {useState, useEffect} from "react";
+
 
 export const Home = () => {
+    const [contacts, setContacts] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [idToDelete, setIdToDelete] = useState(null);
 
-  const {store, dispatch} =useGlobalReducer()
+    useEffect(() => {
+        const fetchData = async () => {
+            setLoading(true);
+            try {
+                const data = await ContactServices.getContacts();
+                
+               
+                setContacts(data || []);
+                setLoading(false);
+            } catch (error) {
+                console.error("Error cargando contactos:", error);
+                setLoading(false);
+            }
+        };
+        fetchData();
+    }, []);
 
-	return (
-		<div className="text-center mt-5">
-			<h1>Hello Rigo!!</h1>
-			<p>
-				<img src={rigoImageUrl} />
-			</p>
-		</div>
-	);
-}; 
+    const confirmDelete = async () => {
+        const success = await ContactServices.deleteContact(idToDelete);
+        if (success) {
+            // Borramos visualmente el contacto de la lista
+            setContacts(contacts.filter(item => item.id !== idToDelete));
+            // Cerramos el modal
+            setIdToDelete(null);
+        }
+    };
+    
+    if (loading) return <h1 className="text-center mt-5">Cargando contactos...</h1>;
+
+    return (
+        <div className="container mt-5">
+            {/* Botón de añadir */}
+            <div className="d-flex justify-content-end mb-4">
+                <Link to="/form" className="btn btn-success">
+                    Add new contact
+                </Link>
+            </div>
+
+           
+            <div className="list-group">
+                {contacts.length > 0 ? (
+                    contacts.map((item) => (
+                        <ContactCard 
+                            key={item.id} 
+                            name={item.name} 
+                            address={item.address} 
+                            phone={item.phone} 
+                            email={item.email} 
+                        />
+                    ))
+                ) : (
+                    <div className="text-center mt-5">
+                        <h3>La agenda está vacía</h3>
+                        <p>Usa el botón superior para añadir tu primer contacto.</p>
+                    </div>
+                )}
+            </div>
+
+            {idToDelete && (
+    <div className="modal d-block bg-dark bg-opacity-50" tabIndex="-1">
+        <div className="modal-dialog">
+            <div className="modal-content">
+                <div className="modal-header">
+                    <h5 className="modal-title">¿Estás seguro?</h5>
+                    <button type="button" className="btn-close" onClick={() => setIdToDelete(null)}></button>
+                </div>
+                <div className="modal-body">
+                    <p>Si eliminas este contacto, no podrás recuperarlo.</p>
+                </div>
+                <div className="modal-footer">
+                    <button type="button" className="btn btn-secondary" onClick={() => setIdToDelete(null)}>Oh no!</button>
+                    <button type="button" className="btn btn-primary" onClick={() => confirmDelete()}>Sí, borrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+)}
+        </div>
+    );
+};
