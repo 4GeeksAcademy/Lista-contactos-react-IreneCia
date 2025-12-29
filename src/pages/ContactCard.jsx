@@ -4,7 +4,7 @@ export default function ContactCard({ name, address, phone, email, onDelete }) {
     return (
 
         <>
-            <div className="card mb-3 mx-auto" style={{ maxWidth: "800px" }}>
+            <div className="card mb-3" style={{ maxWidth: "800px" }}>
                 <div className="row g-0 align-items-center">
                     <div className="col-md-3 d-flex justify-content-center p-3">
                         <img src={simpsonImg} alt="profile" className="rounded-circle" style={{ width: "100px", height: "100px", objectFit: "cover", border: "2px solid black" }}
