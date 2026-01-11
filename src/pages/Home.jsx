@@ -37,10 +37,15 @@ export const Home = () => {
             setIdToDelete(null);
         }
     };
+      const handleEdit = (id) => {
+    
+        window.location.pathname = `/edit/${id}`;
+    };
 
     if (loading) return <h1 className="text-center mt-5">Cargando contactos...</h1>;
 
     return (
+
         <div className="container px-5 mt-5">
 
             <div className="d-flex justify-content-end mb-4">
@@ -55,11 +60,13 @@ export const Home = () => {
                     contacts.map((item) => (
                         <ContactCard
                             key={item.id}
+                            id={item.id}
                             name={item.name}
                             address={item.address}
                             phone={item.phone}
                             email={item.email}
                             onDelete={() => setIdToDelete(item.id)}
+                            onEdit={handleEdit}
                         />
                     ))
                 ) : (

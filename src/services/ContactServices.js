@@ -45,8 +45,25 @@ const ContactServices = {
             console.error("Error al editar:", error);
             return false;
         }
+    },
+
+ updateContact: async (id, contactObject) => {
+        try {
+            const response = await fetch(`https://playground.4geeks.com/contact/agendas/Irene/contacts/${id}`, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(contactObject)
+            });
+            if (response.ok) return await response.json();
+            return false;
+        } catch (error) {
+            console.error("Error al actualizar contacto:", error);
+            return false;
+        }
     }
 };
 
 export default ContactServices;
+   
+
 

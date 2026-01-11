@@ -1,5 +1,5 @@
 import simpsonImg from "../assets/img/descarga.png";
-export default function ContactCard({ name, address, phone, email, onDelete }) {
+export default function ContactCard({ id, name, address, phone, email, onDelete, onEdit }) {
 
     return (
 
@@ -21,7 +21,14 @@ export default function ContactCard({ name, address, phone, email, onDelete }) {
                         </div>
                     </div>
                     <div className="col-md-2 d-flex justify-content-end align-self-start p-3">
-                        <button className="btn btn-link text-dark p-2"><i className="fas fa-pencil-alt"></i></button>
+
+
+                        <button
+                            className="btn btn-link text-dark p-2"
+                            onClick={() => onEdit(id)} 
+                        >
+                            <i className="fas fa-pencil-alt"></i>
+                        </button>
                         <button className="btn btn-link" onClick={onDelete}>
                             <i className="fas fa-trash"></i>
                         </button>

@@ -26,6 +26,7 @@ export const router = createBrowserRouter(
         {/* Nested Routes: Defines sub-routes within the BaseHome component. */}
         <Route path= "/" element={<Home />} />
         <Route path="/form" element={<Form />} />
+          <Route path="/edit/:id" element={<Form />} />
       </Route>
     )
 );
